@@ -29,16 +29,29 @@ final class AnimalController extends AbstractController
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($animal);
-            $entityManager->flush();
+        $errorMessage = null;
 
-            return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dateNaissance = $animal->getDateNaissance();
+            $dateArrive = $animal->getDateArrive();
+            $dateDepart = $animal->getDateDepart();
+            $genre = $animal->getGenre();
+            $sterilise = $animal->isSterilise();
+
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie")) {
+                $errorMessage = "Erreur lors de la création de l'animal";
+            } else {
+                $entityManager->persist($animal);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_animal_index');
+            }
         }
 
         return $this->render('animal/new.html.twig', [
             'animal' => $animal,
             'form' => $form,
+            'message' => $errorMessage,
         ]);
     }
 
@@ -55,23 +68,35 @@ final class AnimalController extends AbstractController
     {
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
+        $errorMessage = null;
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $dateNaissance = $animal->getDateNaissance();
+            $dateArrive = $animal->getDateArrive();
+            $dateDepart = $animal->getDateDepart();
+            $genre = $animal->getGenre();
+            $sterilise = $animal->isSterilise();
 
-            return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie")) {
+                $errorMessage = "Erreur lors de la modification de l'animal.";
+            } else {
+                $entityManager->flush();
+                return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('animal/edit.html.twig', [
             'animal' => $animal,
             'form' => $form,
+            'message' => $errorMessage,
         ]);
     }
 
     #[Route('/{id}', name: 'app_animal_delete', methods: ['POST'])]
     public function delete(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$animal->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $animal->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($animal);
             $entityManager->flush();
         }
