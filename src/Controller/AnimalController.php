@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Animal;
+use App\Entity\Enclo;
 use App\Form\AnimalType;
 use App\Repository\AnimalRepository;
+use App\Repository\EncloRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,7 +26,7 @@ final class AnimalController extends AbstractController
     }
 
     #[Route('/new', name: 'app_animal_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, EncloRepository $enclo, AnimalRepository $animaux): Response
     {
         $animal = new Animal();
         $form = $this->createForm(AnimalType::class, $animal);
@@ -38,7 +41,11 @@ final class AnimalController extends AbstractController
             $genre = $animal->getGenre();
             $sterilise = $animal->isSterilise();
 
-            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie")) {
+            $occupationActuelle = count($animaux->findBy(['id_enclo' => $animal->getIdEnclo()]));
+            $capacityEnclo = $enclo->find($animal->getIdEnclo())->getCapacite();
+
+
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo-1 < $occupationActuelle)) {
                 $errorMessage = "Erreur lors de la création de l'animal";
             } else {
                 $entityManager->persist($animal);
@@ -64,12 +71,14 @@ final class AnimalController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_animal_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Animal $animal, EntityManagerInterface $entityManager, EncloRepository $enclo, AnimalRepository $animaux): Response
     {
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
         $errorMessage = null;
 
+        $occupationActuelle = count($animaux->findBy(['id_enclo' => $animal->getIdEnclo()]));
+        $capacityEnclo = $enclo->find($animal->getIdEnclo())->getCapacite();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $dateNaissance = $animal->getDateNaissance();
@@ -78,7 +87,9 @@ final class AnimalController extends AbstractController
             $genre = $animal->getGenre();
             $sterilise = $animal->isSterilise();
 
-            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie")) {
+
+
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo < $occupationActuelle)) {
                 $errorMessage = "Erreur lors de la modification de l'animal.";
             } else {
                 $entityManager->flush();
@@ -102,5 +113,10 @@ final class AnimalController extends AbstractController
         }
 
         return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    public function check_enclo_capacity(int $id_enclo): Response
+    {
+        $nombre_animaux = $animal();
     }
 }
