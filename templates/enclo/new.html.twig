@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Enclo{% endblock %}
+
+{% block body %}
+    <h1>Create new Enclo</h1>
+
+    {{ include('enclo/_form.html.twig') }}
+
+    <a href="{{ path('app_enclo_index') }}">back to list</a>
+{% endblock %}

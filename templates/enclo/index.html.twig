@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enclo index{% endblock %}
+
+{% block body %}
+    <h1>Enclo index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Superficie</th>
+                <th>Capacite</th>
+                <th>Quarantaine</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for enclo in enclos %}
+            <tr>
+                <td>{{ enclo.id }}</td>
+                <td>{{ enclo.nom }}</td>
+                <td>{{ enclo.superficie }}</td>
+                <td>{{ enclo.capacite }}</td>
+                <td>{{ enclo.quarantaine ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_enclo_show', {'id': enclo.id}) }}">show</a>
+                    <a href="{{ path('app_enclo_edit', {'id': enclo.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_enclo_new') }}">Create new</a>
+{% endblock %}

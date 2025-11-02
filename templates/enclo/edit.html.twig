@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Enclo{% endblock %}
+
+{% block body %}
+    <h1>Edit Enclo</h1>
+
+    {{ include('enclo/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_enclo_index') }}">back to list</a>
+
+    {{ include('enclo/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Animal index{% endblock %}
+
+{% block body %}
+    <h1>Animal index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Date_naissance</th>
+                <th>Date_arrive</th>
+                <th>Date_depart</th>
+                <th>Genre</th>
+                <th>Espece</th>
+                <th>Sterilise</th>
+                <th>Quarantaine</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for animal in animals %}
+            <tr>
+                <td>{{ animal.id }}</td>
+                <td>{{ animal.nom }}</td>
+                <td>{{ animal.dateNaissance ? animal.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ animal.dateArrive ? animal.dateArrive|date('Y-m-d') : '' }}</td>
+                <td>{{ animal.dateDepart ? animal.dateDepart|date('Y-m-d') : '' }}</td>
+                <td>{{ animal.genre }}</td>
+                <td>{{ animal.espece }}</td>
+                <td>{{ animal.sterilise ? 'Yes' : 'No' }}</td>
+                <td>{{ animal.quarantaine ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_animal_show', {'id': animal.id}) }}">show</a>
+                    <a href="{{ path('app_animal_edit', {'id': animal.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_animal_new') }}">Create new</a>
+{% endblock %}
