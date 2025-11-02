@@ -19,7 +19,14 @@ class AnimalType extends AbstractType
             ->add('date_naissance')
             ->add('date_arrive')
             ->add('date_depart')
-            ->add('genre')
+            ->add('genre', ChoiceType::class, [
+                'choices' => [
+                    'Mâle' => 'male',
+                    'Femelle' => 'femelle',
+                    'Non défini' => 'non définie',
+                ],
+                'placeholder' => 'Choisir un genre', // optionnel
+            ])
             ->add('espece')
             ->add('sterilise')
             ->add('quarantaine')
