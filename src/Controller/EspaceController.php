@@ -29,16 +29,27 @@ final class EspaceController extends AbstractController
         $form = $this->createForm(EspaceType::class, $espace);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($espace);
-            $entityManager->flush();
+        $errorMessage = null;
 
-            return $this->redirectToRoute('app_espace_index', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dateOuverture = $espace->getDateOuverture();
+            $dateFermeture = $espace->getDateFermeture();
+
+            if (($dateFermeture && $dateOuverture && $dateFermeture > $dateOuverture) || ($dateFermeture && !$dateOuverture)) {
+                $errorMessage = "Erreur lors de la création de l'espace";
+            } else {
+
+                $entityManager->persist($espace);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_espace_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('espace/new.html.twig', [
             'espace' => $espace,
             'form' => $form,
+            'message' => $errorMessage,
         ]);
     }
 
@@ -55,16 +66,27 @@ final class EspaceController extends AbstractController
     {
         $form = $this->createForm(EspaceType::class, $espace);
         $form->handleRequest($request);
+        $errorMessage = null;
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $dateOuverture = $espace->getDateOuverture();
+            $dateFermeture = $espace->getDateFermeture();
 
-            return $this->redirectToRoute('app_espace_index', [], Response::HTTP_SEE_OTHER);
+
+            if (($dateFermeture && $dateOuverture && $dateFermeture < $dateOuverture) || ($dateFermeture && !$dateOuverture)) {
+                $errorMessage = "Erreur lors de la modification de l'espace";
+            } else {
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_espace_index', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->render('espace/edit.html.twig', [
             'espace' => $espace,
             'form' => $form,
+            'message' => $errorMessage,
         ]);
     }
 
