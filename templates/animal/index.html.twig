@@ -11,27 +11,26 @@
             </div>
         {% endfor %}
     {% endfor %}
-
-    {% for animal in animals %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <h5 class="card-title">{{ animal.nom }}</h5>
-                    <p class="test-secondary">{{ animal.espece }}</p>
+    <div class="row w-100">
+        {% for animal in animals %}
+            <div class="card m-2" style="width: 18rem;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ animal.nom }}</h5>
+                        <p class="test-secondary">{{ animal.espece }}</p>
+                    </div>
+                    <a href="{{ path("app_animal_show", {id:animal.id}) }}" class="btn btn-primary"><i
+                            class="fa-solid fa-circle-info"></i></a>
+                    <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ path("app_animal_delete", {id:animal.id}) }}" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"></i></a>
                 </div>
-                <a href="{{ path("app_animal_show", {id:animal.id}) }}" class="btn btn-primary"><i class="fa-solid fa-circle-info"></i></a>
-                <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a href="{{ path("app_animal_delete", {id:animal.id}) }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
             </div>
-        </div>
-        <tr>
-    {% else %}
-        <tr>
-            <td colspan="10">no records found</td>
-        </tr>
-    {% endfor %}
+        {% endfor %}
+    </div>
+    <a class="btn btn-primary m-1" href="{{ path('app_animal_new') }}">Create new</a>
     </tbody>
     </table>
 
-    <a href="{{ path('app_animal_new') }}">Create new</a>
 {% endblock %}

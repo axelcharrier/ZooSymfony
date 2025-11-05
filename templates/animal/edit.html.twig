@@ -4,13 +4,6 @@
 
 {% block body %}
     <h1>Edit Animal</h1>
-    {% for messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-danger">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
 
     {{ include('animal/_form.html.twig', {'button_label': 'Update'}) }}
 
