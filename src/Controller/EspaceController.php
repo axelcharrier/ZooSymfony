@@ -58,6 +58,7 @@ final class EspaceController extends AbstractController
     {
         return $this->render('espace/show.html.twig', [
             'espace' => $espace,
+            'enclos' => $espace->getEnclos(),
         ]);
     }
 

@@ -61,7 +61,7 @@ final class EncloController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_enclo_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_espace_show', ['id'=>$enclo->getIdEspace()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('enclo/edit.html.twig', [

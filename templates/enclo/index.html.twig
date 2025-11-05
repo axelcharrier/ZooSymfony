@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">{{ enclo.nom }}</h5>
-                        <p class="test-secondary">{{ enclo.superficie }}</p>
+                        <p class="test-secondary">{{ enclo.superficie }} m2</p>
                     </div>
                     <a href="{{ path("app_enclo_show", {id:enclo.id}) }}" class="btn btn-primary"><i
                             class="fa-solid fa-circle-info"></i></a>
@@ -30,5 +30,5 @@
             </div>
         {% endfor %}
     </div>
-    <a class="btn btn-primary m-1" href="{{ path('app_animal_new') }}">Create new</a>
+    <a class="btn btn-primary m-1" href="{{ path('app_enclo_new') }}">Create new</a>
 {% endblock %}
