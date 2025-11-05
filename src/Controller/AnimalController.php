@@ -89,8 +89,10 @@ final class AnimalController extends AbstractController
 
             if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo < $occupationActuelle) || ($verifId == 13)) {
                 $this->addFlash("error", "Erreur lors de la modification de l'animal, vérifiez les données entrées");
-                return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
-
+                return $this->render('animal/edit.html.twig', [
+                    'animal' => $animal,
+                    'form' => $form,
+                ]);
             } else {
                 $entityManager->flush();
                 return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
