@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Enclo;
 use App\Form\EncloType;
+use App\Repository\AnimalRepository;
 use App\Repository\EncloRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,11 +70,19 @@ final class EncloController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_enclo_delete', methods: ['POST'])]
-    public function delete(Request $request, Enclo $enclo, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Enclo $enclo, EntityManagerInterface $entityManager, AnimalRepository $animaux): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$enclo->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($enclo);
-            $entityManager->flush();
+        if ($this->isCsrfTokenValid('delete' . $enclo->getId(), $request->getPayload()->getString('_token'))) {
+
+            try {
+                $entityManager->remove($enclo);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'enclo a bien été supprimé.');
+            }
+            catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
+                $this->addFlash('error', 'Impossible de supprimer cet enclo car il est encore lié à d’autres animaux.');
+            }
         }
 
         return $this->redirectToRoute('app_enclo_index', [], Response::HTTP_SEE_OTHER);
