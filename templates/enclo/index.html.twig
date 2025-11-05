@@ -12,38 +12,23 @@
             </div>
         {% endfor %}
     {% endfor %}
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Superficie</th>
-                <th>Capacite</th>
-                <th>Quarantaine</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row w-100">
         {% for enclo in enclos %}
-            <tr>
-                <td>{{ enclo.id }}</td>
-                <td>{{ enclo.nom }}</td>
-                <td>{{ enclo.superficie }}</td>
-                <td>{{ enclo.capacite }}</td>
-                <td>{{ enclo.quarantaine ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_enclo_show', {'id': enclo.id}) }}">show</a>
-                    <a href="{{ path('app_enclo_edit', {'id': enclo.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+            <div class="card m-2" style="width: 18rem;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ enclo.nom }}</h5>
+                        <p class="test-secondary">{{ enclo.superficie }}</p>
+                    </div>
+                    <a href="{{ path("app_enclo_show", {id:enclo.id}) }}" class="btn btn-primary"><i
+                            class="fa-solid fa-circle-info"></i></a>
+                    <a href="{{ path("app_enclo_edit", {id:enclo.id}) }}" class="btn btn-success"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ path("app_enclo_delete", {id:enclo.id}) }}" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_enclo_new') }}">Create new</a>
+    </div>
+    <a class="btn btn-primary m-1" href="{{ path('app_animal_new') }}">Create new</a>
 {% endblock %}

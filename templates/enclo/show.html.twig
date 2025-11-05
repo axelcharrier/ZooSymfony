@@ -5,34 +5,26 @@
 {% block body %}
     <h1>Enclo</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ enclo.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ enclo.nom }}</td>
-            </tr>
-            <tr>
-                <th>Superficie</th>
-                <td>{{ enclo.superficie }}</td>
-            </tr>
-            <tr>
-                <th>Capacite</th>
-                <td>{{ enclo.capacite }}</td>
-            </tr>
-            <tr>
-                <th>Quarantaine</th>
-                <td>{{ enclo.quarantaine ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row">
+        {% for animal in animals %}
+            <div class="card m-2" style="width: 18rem;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ animal.nom }}</h5>
+                        <p class="test-secondary">{{ animal.espece }}</p>
+                    </div>
+                    <a href="{{ path("app_animal_show", {id:animal.id}) }}" class="btn btn-primary"><i
+                            class="fa-solid fa-circle-info"></i></a>
+                    <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i
+                            class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{{ path("app_animal_delete", {id:animal.id}) }}" class="btn btn-danger"><i
+                            class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex justify-content-start w-100">
 
-    <a href="{{ path('app_enclo_index') }}">back to list</a>
-
-    <a href="{{ path('app_enclo_edit', {'id': enclo.id}) }}">edit</a>
-
-    {{ include('enclo/_delete_form.html.twig') }}
+        {{ include('enclo/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

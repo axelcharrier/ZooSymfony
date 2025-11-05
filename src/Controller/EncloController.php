@@ -48,6 +48,7 @@ final class EncloController extends AbstractController
     {
         return $this->render('enclo/show.html.twig', [
             'enclo' => $enclo,
+            'animals' => $enclo->getAnimals(),
         ]);
     }
 
