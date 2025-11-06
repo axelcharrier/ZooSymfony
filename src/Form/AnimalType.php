@@ -28,7 +28,16 @@ class AnimalType extends AbstractType
                 ],
                 'placeholder' => 'Choisir un genre', // optionnel
             ])
-            ->add('espece')
+            ->add('espece', ChoiceType::class, [
+        'choices' => [
+            'Lion' => 'lion',
+            'Tigre' => 'tigre',
+            'Vautour' => 'vautour',
+            'Serpent' => 'serpent',
+            'Requin' => 'requin',
+        ],
+        'placeholder' => 'Choisir une espèce', // optionnel
+    ])
             ->add('sterilise')
             ->add('quarantaine')
             ->add('id_enclo', EntityType::class, [
