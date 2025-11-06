@@ -95,8 +95,12 @@ final class EspaceController extends AbstractController
     public function delete(Request $request, Espace $espace, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$espace->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($espace);
-            $entityManager->flush();
+            try {
+                $entityManager->remove($espace);
+                $entityManager->flush();
+            } catch (\Exception $exception) {
+                $this->addFlash("error", "Un ou des enclos contient encore un ou des animaux, vous ne pouvez pas supprimer cet espace");
+            }
         }
 
         return $this->redirectToRoute('app_espace_index', [], Response::HTTP_SEE_OTHER);

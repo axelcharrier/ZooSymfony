@@ -3,8 +3,14 @@
 {% block title %}Espace{% endblock %}
 
 {% block body %}
-    <h1>Espace</h1>
-
+    <h1>{{ espace.nom }}</h1>
+    {% for messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     <div class="row">
         {% for enclo in enclos %}
             <div class="card m-2" style="width: 18rem;">
@@ -13,12 +19,13 @@
                         <h5 class="card-title">{{ enclo.nom }}</h5>
                         <p class="test-secondary">{{ enclo.superficie }} m2</p>
                     </div>
-                    <a href="{{ path("app_enclo_show", {id:enclo.id}) }}" class="btn btn-primary"><i
-                            class="fa-solid fa-circle-info"></i></a>
-                    <a href="{{ path("app_enclo_edit", {id:enclo.id}) }}" class="btn btn-success"><i
-                            class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="{{ path("app_enclo_delete", {id:enclo.id}) }}" class="btn btn-danger"><i
-                            class="fa-solid fa-trash"></i></a>
+                    <div class="d-flex">
+                        <a href="{{ path("app_enclo_show", {id:enclo.id}) }}" class="btn btn-primary"><i
+                                class="fa-solid fa-circle-info"></i></a>
+                        <a href="{{ path("app_enclo_edit", {id:enclo.id}) }}" class="btn btn-success"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        {{ include('enclo/_delete_form.html.twig') }}
+                    </div>
                 </div>
             </div>
         {% endfor %}

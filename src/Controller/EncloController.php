@@ -34,7 +34,7 @@ final class EncloController extends AbstractController
             $entityManager->persist($enclo);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_enclo_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_espace_show', ['id' => $enclo->getIdEspace()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('enclo/new.html.twig', [
@@ -73,6 +73,7 @@ final class EncloController extends AbstractController
     #[Route('/{id}', name: 'app_enclo_delete', methods: ['POST'])]
     public function delete(Request $request, Enclo $enclo, EntityManagerInterface $entityManager, AnimalRepository $animaux): Response
     {
+        $id = $enclo->getIdEspace()->getId();
         if ($this->isCsrfTokenValid('delete' . $enclo->getId(), $request->getPayload()->getString('_token'))) {
 
             try {
@@ -86,6 +87,6 @@ final class EncloController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('app_enclo_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_espace_show', ['id'=>$id], Response::HTTP_SEE_OTHER);
     }
 }

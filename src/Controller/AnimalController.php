@@ -51,7 +51,7 @@ final class AnimalController extends AbstractController
                 $entityManager->persist($animal);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('app_animal_index');
+                return $this->redirectToRoute('app_enclo_show', ['id'=>$animal->getIdEnclo()->getId()], Response::HTTP_SEE_OTHER);
             }
         }
 
@@ -94,7 +94,7 @@ final class AnimalController extends AbstractController
                 ]);
             } else {
                 $entityManager->flush();
-                return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_enclo_show', ['id'=>$animal->getIdEnclo()->getId()], Response::HTTP_SEE_OTHER);
             }
         }
 
@@ -107,16 +107,12 @@ final class AnimalController extends AbstractController
     #[Route('animal/{id}/delete', name: 'app_animal_delete', methods: ['POST'])]
     public function delete(Request $request, Animal $animal, EntityManagerInterface $entityManager): Response
     {
+        $id = $animal->getIdEnclo()->getId();
         if ($this->isCsrfTokenValid('delete' . $animal->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($animal);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    public function check_enclo_capacity(int $id_enclo): Response
-    {
-        $nombre_animaux = $animal();
+        return $this->redirectToRoute('app_enclo_show', ["id"=>$id], Response::HTTP_SEE_OTHER);
     }
 }

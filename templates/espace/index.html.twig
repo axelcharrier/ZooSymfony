@@ -3,7 +3,7 @@
 {% block title %}Espace index{% endblock %}
 
 {% block body %}
-    <h1>Espace index</h1>
+    <h1>Espaces</h1>
 
     {% for messages in app.flashes %}
         {% for message in messages %}
@@ -20,12 +20,13 @@
                         <h5 class="card-title">{{ espace.nom }}</h5>
                         <p class="test-secondary">{{ espace.superficie }} m2</p>
                     </div>
-                    <a href="{{ path("app_espace_show", {id:espace.id}) }}" class="btn btn-primary"><i
-                            class="fa-solid fa-circle-info"></i></a>
-                    <a href="{{ path("app_espace_edit", {id:espace.id}) }}" class="btn btn-success"><i
-                            class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="{{ path("app_espace_delete", {id:espace.id}) }}" class="btn btn-danger"><i
-                            class="fa-solid fa-trash"></i></a>
+                    <div class="d-flex">
+                        <a href="{{ path("app_espace_show", {id:espace.id}) }}" class="btn btn-primary"><i
+                                class="fa-solid fa-circle-info"></i></a>
+                        <a href="{{ path("app_espace_edit", {id:espace.id}) }}" class="btn btn-success"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        {{ include('espace/_delete_form.html.twig') }}
+                    </div>
                 </div>
             </div>
         {% endfor %}

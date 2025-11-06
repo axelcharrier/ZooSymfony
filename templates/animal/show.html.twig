@@ -3,7 +3,7 @@
 {% block title %}Animal{% endblock %}
 
 {% block body %}
-    <h1>Animal</h1>
+    <h1>{{ animal.nom }}</h1>
 
     <table class="table">
         <tbody>
@@ -47,7 +47,7 @@
     </table>
 
     <div class="d-flex justify-content-start w-100">
-        <a class="btn btn-primary" href="{{ path('app_animal_index') }}"><i class="fa-solid fa-rotate-left"></i></a>
+        <a class="btn btn-primary" href="{{ path('app_enclo_show', {id:animal.idEnclo.id}) }}"><i class="fa-solid fa-rotate-left"></i></a>
 
         <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i
                 class="fa-solid fa-pen-to-square"></i></a>

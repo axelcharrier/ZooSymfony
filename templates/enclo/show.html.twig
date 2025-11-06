@@ -3,7 +3,7 @@
 {% block title %}Enclo{% endblock %}
 
 {% block body %}
-    <h1>Enclo</h1>
+    <h1>{{ enclo.nom }}</h1>
 
     <div class="row">
         {% for animal in animals %}
@@ -13,18 +13,21 @@
                         <h5 class="card-title">{{ animal.nom }}</h5>
                         <p class="test-secondary">{{ animal.espece }}</p>
                     </div>
-                    <a href="{{ path("app_animal_show", {id:animal.id}) }}" class="btn btn-primary"><i
-                            class="fa-solid fa-circle-info"></i></a>
-                    <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i
-                            class="fa-solid fa-pen-to-square"></i></a>
-                    <a href="{{ path("app_animal_delete", {id:animal.id}) }}" class="btn btn-danger"><i
-                            class="fa-solid fa-trash"></i></a>
+                    <div class="d-flex">
+                        <a href="{{ path("app_animal_show", {id:animal.id}) }}" class="btn btn-primary"><i
+                                class="fa-solid fa-circle-info"></i></a>
+                        <a href="{{ path("app_animal_edit", {id:animal.id}) }}" class="btn btn-success"><i
+                                class="fa-solid fa-pen-to-square"></i></a>
+                        {{ include('animal/_delete_form.html.twig') }}
+                    </div>
                 </div>
             </div>
         {% endfor %}
     </div>
+    <a href="{{ path('app_animal_new') }}" class="btn btn-primary">Create New</a>
+
     <div class="d-flex justify-content-start w-100">
 
-        {{ include('enclo/_delete_form.html.twig') }}
+        <a href="{{ path('app_espace_show', {id:enclo.idEspace.id}) }}" class="btn btn-secondary"><i class="fa-solid fa-rotate-left"></i></a>
     </div>
 {% endblock %}
