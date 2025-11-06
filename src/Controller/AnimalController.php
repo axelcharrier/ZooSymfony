@@ -38,14 +38,16 @@ final class AnimalController extends AbstractController
             $dateDepart = $animal->getDateDepart();
             $genre = $animal->getGenre();
             $sterilise = $animal->isSterilise();
+            $verifId = strlen(strval($animal->getId())) ;
+
 
             $occupationActuelle = count($animaux->findBy(['id_enclo' => $animal->getIdEnclo()]));
             $capacityEnclo = $enclo->find($animal->getIdEnclo())->getCapacite();
 
 
-            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo-1 < $occupationActuelle)) {
-                $this->addFlash("error", "Erreur lors de la modification de l'animal, vérifiez les données entrées");
-                return $this->redirectToRoute('app_animal_index', [], Response::HTTP_SEE_OTHER);
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo-1 < $occupationActuelle) || ($verifId != 13)) {
+                $this->addFlash("error", "Erreur lors de la création de l'animal, vérifiez les données entrées");
+                return $this->redirectToRoute('app_animal_new', [], Response::HTTP_SEE_OTHER);
 
             } else {
                 $entityManager->persist($animal);
@@ -86,12 +88,9 @@ final class AnimalController extends AbstractController
             $sterilise = $animal->isSterilise();
             $verifId = strlen(strval($animal->getId())) ;
 
-            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo < $occupationActuelle) || ($verifId == 13)) {
+            if (($dateNaissance && $dateArrive && $dateNaissance > $dateArrive) || ($dateDepart && $dateArrive && $dateDepart < $dateArrive) || ($sterilise && $genre == "non définie") || ($capacityEnclo < $occupationActuelle) || ($verifId != 14)) {
                 $this->addFlash("error", "Erreur lors de la modification de l'animal, vérifiez les données entrées");
-                return $this->render('animal/edit.html.twig', [
-                    'animal' => $animal,
-                    'form' => $form,
-                ]);
+                return $this->redirectToRoute('app_animal_edit', ['id'=>$animal->getId()], Response::HTTP_SEE_OTHER);
             } else {
                 $entityManager->flush();
                 return $this->redirectToRoute('app_enclo_show', ['id'=>$animal->getIdEnclo()->getId()], Response::HTTP_SEE_OTHER);
